@@ -1,7 +1,16 @@
-#include <windows.h>
+#ifdef _WIN32
+#define ISWINDOWS
+#elif defined _WIN64
+#define ISWINDOWS
+#endif // _WIN32
 
-void windpi_setaware()
+#ifdef ISWINDOWS
+#include "windows.h"
+#endif // ISWINDOWS
+
+void setprocessdpiaware()
 {
+    #ifdef ISWINDOWS
     typedef enum PROCESS_DPI_AWARENESS {
         PROCESS_DPI_UNAWARE = 0,
         PROCESS_SYSTEM_DPI_AWARE = 1,
@@ -34,4 +43,5 @@ void windpi_setaware()
     */
         SetProcessDPIAware();
     }
+    #endif // ISWINDOWS
 }

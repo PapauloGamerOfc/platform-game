@@ -9,7 +9,7 @@
 #include "types.h"
 #include "mathutils.h"
 #include "image.h"
-#include "windpi.h"
+#include "dpiutils.h"
 
 int main(int argc, char*argv[])
 {
@@ -22,7 +22,7 @@ int main(int argc, char*argv[])
     int width, height;
     int loadResult;
 
-    windpi_setaware();
+    setprocessdpiaware();
     TTF_Init();
 
     loadResult = loadGame(&game);
