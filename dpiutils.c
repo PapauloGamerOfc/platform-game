@@ -1,16 +1,10 @@
 #ifdef _WIN32
-#define ISWINDOWS
-#elif defined _WIN64
-#define ISWINDOWS
-#endif // _WIN32
-
-#ifdef ISWINDOWS
 #include "windows.h"
 #endif // ISWINDOWS
 
 void setprocessdpiaware()
 {
-    #ifdef ISWINDOWS
+    #ifdef _WIN32
     typedef enum PROCESS_DPI_AWARENESS {
         PROCESS_DPI_UNAWARE = 0,
         PROCESS_SYSTEM_DPI_AWARE = 1,
@@ -43,5 +37,5 @@ void setprocessdpiaware()
     */
         SetProcessDPIAware();
     }
-    #endif // ISWINDOWS
+    #endif // _WIN32
 }
