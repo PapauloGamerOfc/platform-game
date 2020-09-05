@@ -224,7 +224,7 @@ int checkCoinsCollision(World *world, long long x, long long y, int width, int h
     return 1;
 }
 
-int move(GameState *game, long long *x, long long *y, int width, int height, long long *attr, long double rest, long long longRest)
+int move(GameState *game, long long *x, long long *y, int width, int height, long long *attr, float rest, long long longRest)
 {
     World *world = &game->world;
     long long curMove;
@@ -307,11 +307,11 @@ int move(GameState *game, long long *x, long long *y, int width, int height, lon
 void doUpdate(GameState *game)
 {
     long long delta;
-    long double seconds;
+    float seconds;
     long long longRestX = 0, longRestY = 0;
     long long decreasingTimes;
-    long double dAdder, xMove, yMove;
-    long double dxAvg, dyAvg;
+    float dAdder, xMove, yMove;
+    float dxAvg, dyAvg;
     Man* man = &game->man;
     World* world = &game->world;
     bool right, left, down;
@@ -344,7 +344,7 @@ void doUpdate(GameState *game)
             for(register long long i = 0; i < decreasingTimes; i++)
             {
                 man->dx *= SPEED_DECREASING_FACTOR;
-                if(dabsd(man->dx) < MIN_SPEED)
+                if(fabsf(man->dx) < MIN_SPEED)
                 {
                     man->dx = 0.0;
                     man->restDecreasingX = 0;

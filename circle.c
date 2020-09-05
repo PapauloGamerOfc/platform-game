@@ -6,10 +6,10 @@
 
 int SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int size)
 {
-    double fSize = size;
-    double halfSize = (fSize - 1.0) / 2.0;
-    double ss = halfSize * halfSize;
-    double xFactor, xMinusHalfSize, yMinusHalfSize;
+    float fSize = size;
+    float halfSize = (fSize - 1.0) / 2.0;
+    float ss = halfSize * halfSize;
+    float xFactor, xMinusHalfSize, yMinusHalfSize;
     SDL_Rect rect = {0, 0, 1, 0};
     int xx, yy;
 
@@ -36,11 +36,11 @@ int SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int size)
 int SDL_RenderFillOval(SDL_Renderer *renderer, int x, int y, int width, int height)
 {
     SDL_Rect rect = {0, 0, 1, 0};
-    double fHeight = height, fWidth = width;
-    double halfWidth = (fWidth - 1.0) / 2.0, halfHeight = (fHeight - 1.0) / 2.0;
-    double hh = halfHeight * halfHeight;
-    double ww = halfWidth * halfWidth;
-    double xFactor, xMinusHalfWidth, yMinusHalfHeight;
+    float fHeight = height, fWidth = width;
+    float halfWidth = (fWidth - 1.0) / 2.0, halfHeight = (fHeight - 1.0) / 2.0;
+    float hh = halfHeight * halfHeight;
+    float ww = halfWidth * halfWidth;
+    float xFactor, xMinusHalfWidth, yMinusHalfHeight;
     int xx, yy;
 
     for (xx = 0; xx < width; xx++) {

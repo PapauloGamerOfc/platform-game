@@ -8,7 +8,7 @@ int getCurrentTime(struct timespec* time);
 
 int addNanos(struct timespec *time, long long nanos);
 
-int addSeconds(struct timespec *time, long double seconds);
+int addSeconds(struct timespec *time, float seconds);
 
 long long getDelta(const struct timespec* start, const struct timespec* end);
 

@@ -1,5 +1,7 @@
 #include "timeutils.h"
 
+#include <time.h>
+
 int getCurrentTime(struct timespec* time)
 {
     clock_gettime(CLOCK_MONOTONIC, time);
@@ -16,7 +18,7 @@ int addNanos(struct timespec *time, long long nanos)
     return 0;
 }
 
-int addSeconds(struct timespec *time, long double seconds)
+int addSeconds(struct timespec *time, float seconds)
 {
     int intSeconds = (int) seconds;
     time->tv_sec += intSeconds;

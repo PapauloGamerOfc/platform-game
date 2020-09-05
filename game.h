@@ -43,8 +43,8 @@
 typedef struct
 {
     long long x, y;
-    long double xRest, yRest;
-    long double dx, lastDx;
+    float xRest, yRest;
+    float dx, lastDx;
     long long restDecreasingX;
     bool isFalling;
     struct timespec fall;

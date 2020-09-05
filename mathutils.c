@@ -1,6 +1,6 @@
 #include "mathutils.h"
 
-long double dabsd(long double val)
+float fabsf(float val)
 {
     return val >= 0.0 ? val : -val;
 }
@@ -30,7 +30,7 @@ int imaxi(int a, int b)
     return (a > b) ? a : b;
 }
 
-void clamp(long double* val, long double min, long double max)
+void clamp(float *val, float min, float max)
 {
    if(*val < min)
         *val = min;
