@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <time.h>
 #include "SDL.h"
@@ -42,21 +43,21 @@
 
 typedef struct
 {
-    long long x, y;
+    int64_t x, y;
     float xRest, yRest;
     float dx, lastDx;
-    long long restDecreasingX;
+    int64_t restDecreasingX;
     bool isFalling;
     struct timespec fall;
 } Man;
 
 typedef struct
 {
-    int width;
-    int height;
+    int32_t width;
+    int32_t height;
     uchar* tiles;
-    int totalCoins;
-    int numCoins;
+    int32_t totalCoins;
+    int32_t numCoins;
 } World;
 
 typedef struct
@@ -71,15 +72,15 @@ typedef struct
     bool pressed[KEYBOARD_SIZE];
 
     Image label;
-    int labeledCoins;
-    int labelIntersectCount;
+    int32_t labeledCoins;
+    int32_t labelint32_tersectCount;
     bool showedHidenCoins;
     TTF_Font *font;
 } GameState;
 
-int loadGame(GameState *game);
+int32_t loadGame(GameState *game);
 
-int loadAssets(GameState *game, SDL_Renderer *renderer);
+int32_t loadAssets(GameState *game, SDL_Renderer *renderer);
 
 bool processEvents(SDL_Window *window, GameState *game);
 

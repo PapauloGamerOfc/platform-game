@@ -3,13 +3,14 @@
 #define NANOS_PER_SECOND 1000000000
 
 #include <time.h>
+#include <stdint.h>
 
-int getCurrentTime(struct timespec* time);
+void getCurrentTime(struct timespec* time);
 
-int addNanos(struct timespec *time, long long nanos);
+void addNanos(struct timespec *time, int64_t nanos);
 
-int addSeconds(struct timespec *time, float seconds);
+void addSeconds(struct timespec *time, float seconds);
 
-long long getDelta(const struct timespec* start, const struct timespec* end);
+int64_t getDelta(const struct timespec* start, const struct timespec* end);
 
 #endif // TIMEUTILS_H_INCLUDED

@@ -4,14 +4,14 @@
 #include "mathutils.h"
 #include <math.h>
 
-int SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int size)
+int SDL_RenderFillCircle(SDL_Renderer *renderer, int32_t x, int32_t y, int32_t size)
 {
     float fSize = size;
     float halfSize = (fSize - 1.0) / 2.0;
     float ss = halfSize * halfSize;
     float xFactor, xMinusHalfSize, yMinusHalfSize;
     SDL_Rect rect = {0, 0, 1, 0};
-    int xx, yy;
+    int32_t xx, yy;
 
     for(xx = 0; xx < size; xx++)
     {
@@ -33,7 +33,7 @@ int SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int size)
     return 0;
 }
 
-int SDL_RenderFillOval(SDL_Renderer *renderer, int x, int y, int width, int height)
+int SDL_RenderFillOval(SDL_Renderer *renderer, int32_t x, int32_t y, int32_t width, int32_t height)
 {
     SDL_Rect rect = {0, 0, 1, 0};
     float fHeight = height, fWidth = width;
@@ -41,7 +41,7 @@ int SDL_RenderFillOval(SDL_Renderer *renderer, int x, int y, int width, int heig
     float hh = halfHeight * halfHeight;
     float ww = halfWidth * halfWidth;
     float xFactor, xMinusHalfWidth, yMinusHalfHeight;
-    int xx, yy;
+    int32_t xx, yy;
 
     for (xx = 0; xx < width; xx++) {
         rect.x = x + xx;

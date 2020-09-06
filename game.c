@@ -1,20 +1,20 @@
 #include "game.h"
 
-int loadGame(GameState *game)
+int32_t loadGame(GameState *game)
 {
-    int x, y, i, w, h;
+    int32_t x, y, i, w, h;
     Man* man = &game->man;
     World* world = &game->world;
 
     SDL_Surface *mapSurface = NULL;
     SDL_PixelFormat *mapFormat = NULL;
-    int rMask, rShift, gMask, gShift, bMask, bShift;
-    int bpp;
+    int32_t rMask, rShift, gMask, gShift, bMask, bShift;
+    int32_t bpp;
     uint8_t *p;
     getpixelfunc getpixel = NULL;
     uchar *tiles;
 
-    int pixel, rgb;
+    int32_t pixel, rgb;
 
     memset(game, 0, sizeof(GameState));
 
@@ -98,7 +98,7 @@ int loadGame(GameState *game)
     return 0;
 }
 
-int loadAssets(GameState *game, SDL_Renderer *renderer)
+int32_t loadAssets(GameState *game, SDL_Renderer *renderer)
 {
     const World* world = &game->world;
     char buf[64];
@@ -112,10 +112,10 @@ bool processEvents(SDL_Window *window, GameState *game)
 {
     SDL_Event event;
     bool running = 1;
-    int key;
+    int32_t key;
     bool *keyboard = game->keyboard;
     bool *pressed = game->pressed;
-    int width, height;
+    int32_t width, height;
 
     memset(pressed, 0, KEYBOARD_SIZE);
 
@@ -167,16 +167,16 @@ bool processEvents(SDL_Window *window, GameState *game)
     return running;
 }
 
-int isFree(const World *world, long long x, long long y, int width, int height)
+int32_t isFree(const World *world, int64_t x, int64_t y, int32_t width, int32_t height)
 {
-    long long endX = x + width - 1;
-    long long endY = y + height - 1;
+    int64_t endX = x + width - 1;
+    int64_t endY = y + height - 1;
     if(x < 0 || y < 0 || endX > world->width * TILE_WIDTH || endY > world->height * TILE_HEIGHT)
     {
         return 0;
     }
 
-    int xMin, xMax, yMin, yMax, curX, curY;
+    int32_t xMin, xMax, yMin, yMax, curX, curY;
     xMin = x / TILE_WIDTH;
     xMax = endX / TILE_WIDTH;
     yMin = y / TILE_HEIGHT;
@@ -193,17 +193,17 @@ int isFree(const World *world, long long x, long long y, int width, int height)
     return 1;
 }
 
-int checkCoinsCollision(World *world, long long x, long long y, int width, int height)
+int32_t checkCoinsCollision(World *world, int64_t x, int64_t y, int32_t width, int32_t height)
 {
-    long long endX = x + width - 1;
-    long long endY = y + height - 1;
+    int64_t endX = x + width - 1;
+    int64_t endY = y + height - 1;
     if(endX < 0 || endY < 0 || x >= world->width * TILE_WIDTH || y >= world->height * TILE_HEIGHT)
     {
         return 0;
     }
 
-    int xMin, xMax, yMin, yMax, curX, curY;
-    int curIndex;
+    int32_t xMin, xMax, yMin, yMax, curX, curY;
+    int32_t curIndex;
     xMin = imini(world->width - 1, x / TILE_WIDTH);
     xMax = imaxi(0, endX / TILE_WIDTH);
     yMin = imini(world->height - 1, y / TILE_HEIGHT);
@@ -224,12 +224,12 @@ int checkCoinsCollision(World *world, long long x, long long y, int width, int h
     return 1;
 }
 
-int move(GameState *game, long long *x, long long *y, int width, int height, long long *attr, float rest, long long longRest)
+int32_t move(GameState *game, int64_t *x, int64_t *y, int32_t width, int32_t height, int64_t *attr, float rest, int64_t longRest)
 {
     World *world = &game->world;
-    long long curMove;
-    int moveFactor = 1;
-    int labelX;
+    int64_t curMove;
+    int32_t moveFactor = 1;
+    int32_t labelX;
     if(longRest != 0)
     {
         labelX = (world->width * TILE_WIDTH - game->label.w) >> 1;
@@ -254,7 +254,7 @@ int move(GameState *game, long long *x, long long *y, int width, int height, lon
 
                 if(world->numCoins <= 1 && attr == y && *y == TILE_HEIGHT && *x + width > labelX && *x < labelX + game->label.w)
                 {
-                    game->labelIntersectCount++;
+                    game->labelint32_tersectCount++;
                 }
             }
             else
@@ -262,17 +262,17 @@ int move(GameState *game, long long *x, long long *y, int width, int height, lon
                 *attr -= curMove * moveFactor;
                 if(moveFactor < 0)
                 {
-                    int tileSize = attr == x ? TILE_WIDTH : TILE_HEIGHT;
+                    int32_t tileSize = attr == x ? TILE_WIDTH : TILE_HEIGHT;
                     *attr = *attr / tileSize * tileSize;
                     if(world->numCoins <= 1 && attr == y && *attr == tileSize && *x + width > labelX && *x < labelX + game->label.w)
                     {
-                        game->labelIntersectCount++;
+                        game->labelint32_tersectCount++;
                     }
                 }
                 else
                 {
-                    int tileSize = attr == x ? TILE_WIDTH : TILE_HEIGHT;
-                    int maxIndex = (attr == x ? width : height) - 1;
+                    int32_t tileSize = attr == x ? TILE_WIDTH : TILE_HEIGHT;
+                    int32_t maxIndex = (attr == x ? width : height) - 1;
                     *attr = ((*attr + maxIndex) / tileSize * tileSize) + (tileSize - 1) - maxIndex;
                 }
                 return 1;
@@ -306,10 +306,10 @@ int move(GameState *game, long long *x, long long *y, int width, int height, lon
 
 void doUpdate(GameState *game)
 {
-    long long delta;
+    int64_t delta;
     float seconds;
-    long long longRestX = 0, longRestY = 0;
-    long long decreasingTimes;
+    int64_t longRestX = 0, longRestY = 0;
+    int64_t decreasingTimes;
     float dAdder, xMove, yMove;
     float dxAvg, dyAvg;
     Man* man = &game->man;
@@ -317,7 +317,7 @@ void doUpdate(GameState *game)
     bool right, left, down;
     bool *keyboard = game->keyboard;
     bool *pressed = game->pressed;
-    int size;
+    int32_t size;
 
     getCurrentTime(&game->now);
 
@@ -341,7 +341,7 @@ void doUpdate(GameState *game)
             man->restDecreasingX += delta;
             decreasingTimes = man->restDecreasingX / SPEED_DECREASING_DELTA;
             man->restDecreasingX %= SPEED_DECREASING_DELTA;
-            for(register long long i = 0; i < decreasingTimes; i++)
+            for(register int64_t i = 0; i < decreasingTimes; i++)
             {
                 man->dx *= SPEED_DECREASING_FACTOR;
                 if(fabsf(man->dx) < MIN_SPEED)
@@ -357,7 +357,7 @@ void doUpdate(GameState *game)
         xMove = seconds * dxAvg;
 
         man->xRest += xMove;
-        longRestX = (long long) man->xRest;
+        longRestX = (int64_t) man->xRest;
         man->xRest -= longRestX;
 
         if(move(game, &man->x, &man->y, RECT_WIDTH, RECT_HEIGHT, &man->x, man->xRest, longRestX))
@@ -380,7 +380,7 @@ void doUpdate(GameState *game)
             yMove = seconds * dyAvg;
 
             man->yRest += yMove;
-            longRestY = (long long) man->yRest;
+            longRestY = (int64_t) man->yRest;
             man->yRest -= longRestY;
             if(move(game, &man->x, &man->y, RECT_WIDTH, RECT_HEIGHT, &man->y, man->yRest, longRestY))
             {
@@ -403,11 +403,11 @@ void doUpdate(GameState *game)
                 addSeconds(&man->fall, JUMP_SECONDS);
             }
         }
-        if(!game->showedHidenCoins && game->labelIntersectCount >= 3)
+        if(!game->showedHidenCoins && game->labelint32_tersectCount >= 3)
         {
             game->showedHidenCoins = true;
             size = world->width * world->height;
-            for(register int i = 0; i < size; i++)
+            for(register int32_t i = 0; i < size; i++)
             {
                 if(world->tiles[i] == HIDEN_COIN_TILE)
                 {
@@ -424,7 +424,7 @@ void doRender(SDL_Renderer *renderer, GameState *game)
 {
     const Man *man = &game->man;
     const World *world = &game->world;
-    int x, y;
+    int32_t x, y;
     SDL_Rect tileRect = {0, 0, TILE_WIDTH, TILE_HEIGHT};
 
     if(world->numCoins != game->labeledCoins)

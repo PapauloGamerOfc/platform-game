@@ -1,17 +1,19 @@
 #ifndef MATHUTILS_H_INCLUDED
 #define MATHUTILS_H_INCLUDED
 
+#include <stdint.h>
+
 float fabsf(float val);
 
-int iabsi(int val);
+int32_t iabsi(int32_t val);
 
-long long lminl(long long a, long long b);
+int64_t lminl(int64_t a, int64_t b);
 
-long long lmaxl(long long a, long long b);
+int64_t lmaxl(int64_t a, int64_t b);
 
-int imini(int a, int b);
+int32_t imini(int32_t a, int32_t b);
 
-int imaxi(int a, int b);
+int32_t imaxi(int32_t a, int32_t b);
 
 void clamp(float *val, float min, float max);
 

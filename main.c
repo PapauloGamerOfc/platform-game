@@ -19,7 +19,7 @@ int main(int argc, char*argv[])
 
     int running = 1;
     int exit = 0;
-    int width, height;
+    int32_t width, height;
     int loadResult;
 
     setprocessdpiaware();

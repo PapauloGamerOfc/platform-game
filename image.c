@@ -38,7 +38,7 @@ void destroyImage(Image *image)
     }
 }
 
-void doRenderImage(SDL_Renderer *renderer, const Image *image, int x, int y)
+void doRenderImage(SDL_Renderer *renderer, const Image *image, int32_t x, int32_t y)
 {
     SDL_Rect rect = {x, y, image->w, image->h};
     SDL_RenderCopy(renderer, image->texture, NULL, &rect);

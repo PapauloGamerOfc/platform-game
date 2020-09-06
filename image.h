@@ -19,7 +19,7 @@ int loadImageSurface(SDL_Renderer *renderer, SDL_Surface *source, Image *dest);
 
 void destroyImage(Image* image);
 
-void doRenderImage(SDL_Renderer *renderer, const Image *image, int x, int y);
+void doRenderImage(SDL_Renderer *renderer, const Image *image, int32_t x, int32_t y);
 
 typedef uint32_t (*getpixelfunc)(uint8_t* p);
 
@@ -30,6 +30,6 @@ uint32_t getpixelbpp3bigendian(uint8_t* p);
 uint32_t getpixelbpp3notbigendian(uint8_t* p);
 uint32_t getpixelbpp4(uint8_t* p);
 
-getpixelfunc getpixelfuncfactory(int bpp);
+getpixelfunc getpixelfuncfactory(int32_t bpp);
 
 #endif // IMAGE_H_INCLUDED

@@ -1,31 +1,32 @@
 #include "mathutils.h"
+#include <stdint.h>
 
 float fabsf(float val)
 {
     return val >= 0.0 ? val : -val;
 }
 
-int iabsi(int val)
+int32_t iabsi(int32_t val)
 {
     return val >= 0 ? val : -val;
 }
 
-long long lminl(long long a, long long b)
+int64_t lminl(int64_t a, int64_t b)
 {
     return (a < b) ? a : b;
 }
 
-long long lmaxl(long long a, long long b)
+int64_t lmaxl(int64_t a, int64_t b)
 {
     return (a > b) ? a : b;
 }
 
-int imini(int a, int b)
+int32_t imini(int32_t a, int32_t b)
 {
     return (a < b) ? a : b;
 }
 
-int imaxi(int a, int b)
+int32_t imaxi(int32_t a, int32_t b)
 {
     return (a > b) ? a : b;
 }
