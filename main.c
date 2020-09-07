@@ -45,6 +45,8 @@ int main(int argc, char*argv[])
         exit = loadResult;
     }
 
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     while(running)
     {
         running = processEvents(window, &game);

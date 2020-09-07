@@ -453,8 +453,7 @@ void doRender(SDL_Renderer *renderer, GameState *game)
                 SDL_RenderFillRect(renderer, &tileRect);
                 break;
             case COIN_TILE:
-                SDL_SetRenderDrawColor(renderer, (COIN_HEX >> 16) & 0xFF, (COIN_HEX >> 8) & 0xFF, COIN_HEX & 0xFF, 255);
-                SDL_RenderFillOval(renderer, tileRect.x, tileRect.y, tileRect.w, tileRect.h);
+                SDL_RenderFillOval(renderer, tileRect.x, tileRect.y, tileRect.w, tileRect.h, (COIN_HEX >> 16) & 0xFF, (COIN_HEX >> 8) & 0xFF, COIN_HEX & 0xFF, 255, 0.1);
                 break;
             }
         }
