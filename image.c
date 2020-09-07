@@ -64,7 +64,7 @@ uint32_t getpixelbpp3bigendian(uint8_t* p)
     return p[0] << 16 | p[1] << 8 | p[2];
 }
 
-uint32_t getpixelbpp3notbigendian(uint8_t* p)
+uint32_t getpixelbpp3lilendian(uint8_t* p)
 {
     return p[0] | p[1] << 8 | p[2] << 16;
 }
@@ -79,15 +79,16 @@ getpixelfunc getpixelfuncfactory(int bpp)
     switch(bpp)
     {
         case 1:
-            return &getpixelbpp1;
+            return getpixelbpp1;
             break;
         case 2:
-            return &getpixelbpp2;
+            return getpixelbpp2;
         case 3:
-            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            #if SDL_BYTEORDER == SDL_BIG_ENDIAN
                 return getpixelbpp3bigendian;
-            else
-                return getpixelbpp3notbigendian;
+            #else
+                return getpixelbpp3lilendian;
+            #endif
         case 4:
             return getpixelbpp4;
             break;

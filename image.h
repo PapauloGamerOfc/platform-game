@@ -23,13 +23,6 @@ void doRenderImage(SDL_Renderer *renderer, const Image *image, int32_t x, int32_
 
 typedef uint32_t (*getpixelfunc)(uint8_t* p);
 
-uint32_t getpixelbpp0(uint8_t* p);
-uint32_t getpixelbpp1(uint8_t* p);
-uint32_t getpixelbpp2(uint8_t* p);
-uint32_t getpixelbpp3bigendian(uint8_t* p);
-uint32_t getpixelbpp3notbigendian(uint8_t* p);
-uint32_t getpixelbpp4(uint8_t* p);
-
 getpixelfunc getpixelfuncfactory(int32_t bpp);
 
 #endif // IMAGE_H_INCLUDED
