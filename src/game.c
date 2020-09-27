@@ -19,7 +19,7 @@ int32_t loadGame(GameState *game)
 
     memset(game, 0, sizeof(GameState));
 
-    game->font = TTF_OpenFont("arial.ttf", 40);
+    game->font = TTF_OpenFont("fonts/arial.ttf", 40);
     if(game->font == NULL)
     {
         printf("arial.ttf not found!");
@@ -28,7 +28,7 @@ int32_t loadGame(GameState *game)
 
     game->isFirstUpdate = 1;
 
-    mapSurface = IMG_Load("map.png");
+    mapSurface = IMG_Load("images/map.png");
     if(mapSurface == NULL)
     {
         printf("map.png not found!");
@@ -95,7 +95,7 @@ int32_t loadGame(GameState *game)
     }
     SDL_FreeSurface(mapSurface);
     world->numCoins = world->totalCoins;
-    game->coinChunk = Mix_LoadWAV("coin.wav");
+    game->coinChunk = Mix_LoadWAV("sounds/coin.wav");
     if(!(game->coinChunk))
     {
         return -1;
@@ -122,7 +122,6 @@ int32_t loadAssets(GameState *game, SDL_Renderer *renderer)
     const World* world = &game->world;
     char buf[64];
     game->labeledCoins = world->numCoins;
-    struct timespec tim;
     sprintf(buf, "Coins: %d/%d", world->totalCoins - world->numCoins, world->totalCoins);
     loadImageFont(renderer, game->font, buf, 255, 255, 255, 255, &game->label);
     return 0;
