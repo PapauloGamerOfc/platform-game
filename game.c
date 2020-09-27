@@ -1,4 +1,5 @@
 #include "game.h"
+#include "SDL_Mixer.h"
 
 int32_t loadGame(GameState *game)
 {
@@ -80,7 +81,7 @@ int32_t loadGame(GameState *game)
                 break;
             case HIDEN_COIN_HEX:
                 tiles[i] = HIDEN_COIN_TILE;
-                world->totalCoins++;
+                world->totalHidenCoins++;
                 break;
             case WALL_HEX:
                 tiles[i] = WALL_TILE;
@@ -94,8 +95,26 @@ int32_t loadGame(GameState *game)
     }
     SDL_FreeSurface(mapSurface);
     world->numCoins = world->totalCoins;
+    game->coinChunk = Mix_LoadWAV("coin.wav");
+    if(!(game->coinChunk))
+    {
+        return -1;
+    }
 
     return 0;
+}
+
+void destroyGame(GameState *game)
+{
+    destroyImage(&game->label);
+    if(game->font)
+    {
+        TTF_CloseFont(game->font);
+    }
+    if(game->coinChunk)
+    {
+        Mix_FreeChunk(game->coinChunk);
+    }
 }
 
 int32_t loadAssets(GameState *game, SDL_Renderer *renderer)
@@ -103,6 +122,7 @@ int32_t loadAssets(GameState *game, SDL_Renderer *renderer)
     const World* world = &game->world;
     char buf[64];
     game->labeledCoins = world->numCoins;
+    struct timespec tim;
     sprintf(buf, "Coins: %d/%d", world->totalCoins - world->numCoins, world->totalCoins);
     loadImageFont(renderer, game->font, buf, 255, 255, 255, 255, &game->label);
     return 0;
@@ -193,8 +213,9 @@ int32_t isFree(const World *world, int64_t x, int64_t y, int32_t width, int32_t 
     return 1;
 }
 
-int32_t checkCoinsCollision(World *world, int64_t x, int64_t y, int32_t width, int32_t height)
+int32_t checkCoinsCollision(GameState *game, int64_t x, int64_t y, int32_t width, int32_t height)
 {
+    World *world = &game->world;
     int64_t endX = x + width - 1;
     int64_t endY = y + height - 1;
     if(endX < 0 || endY < 0 || x >= world->width * TILE_WIDTH || y >= world->height * TILE_HEIGHT)
@@ -218,6 +239,12 @@ int32_t checkCoinsCollision(World *world, int64_t x, int64_t y, int32_t width, i
             {
                 world->tiles[curIndex] = SKY_TILE;
                 world->numCoins--;
+                game->coinCollided = true;
+                if(world->numCoins + world->totalHidenCoins == 0)
+                {
+                    game->isReding = true;
+                    game->redTime = game->now;
+                }
             }
         }
     }
@@ -241,6 +268,7 @@ int32_t move(GameState *game, int64_t *x, int64_t *y, int32_t width, int32_t hei
                 longRest++;
             }
             longRest = -longRest;
+            checkCoinsCollision(game, *x, *y, width, height);
         }
         while(longRest > 0)
         {
@@ -248,9 +276,8 @@ int32_t move(GameState *game, int64_t *x, int64_t *y, int32_t width, int32_t hei
             *attr += curMove * moveFactor;
             if(isFree(world, *x, *y, width, height))
             {
-
                 longRest -= curMove;
-                checkCoinsCollision(world, *x, *y, width, height);
+                checkCoinsCollision(game, *x, *y, width, height);
 
                 if(world->numCoins <= 1 && attr == y && *y == TILE_HEIGHT && *x + width > labelX && *x < labelX + game->label.w)
                 {
@@ -325,6 +352,7 @@ void doUpdate(GameState *game)
     seconds = delta / 1000000000.0;
     if(delta != 0)
     {
+        game->coinCollided = false;
         right = keyboard[SDL_SCANCODE_RIGHT] || keyboard[SDL_SCANCODE_D];
         left  = keyboard[SDL_SCANCODE_LEFT]  || keyboard[SDL_SCANCODE_A];
         down  = keyboard[SDL_SCANCODE_DOWN]  || keyboard[SDL_SCANCODE_S];
@@ -415,7 +443,12 @@ void doUpdate(GameState *game)
                 }
             }
         }
+        if(game->coinCollided)
+        {
+            Mix_PlayChannel(-1, game->coinChunk, 0);
+        }
     }
+    game->lastUpdate = game->now;
     game->isFirstUpdate = false;
     man->lastDx = man->dx;
 }
@@ -465,16 +498,28 @@ void doRender(SDL_Renderer *renderer, GameState *game)
 
     doRenderImage(renderer, &game->label, (world->width * TILE_WIDTH - game->label.w) >> 1, 0);
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    if(game->isReding)
+    {
+        int64_t redDelta = getDelta(&game->redTime, &game->now);
+        if(redDelta >= MAX_RED_TIME)
+        {
+            game->isTotalRed = true;
+            game->isReding = false;
+        }
+        else if(redDelta > 0)
+        {
+            Uint8 alpha = (double) redDelta / (double) MAX_RED_TIME * MAX_RED_ALPHA;
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, alpha);
+            SDL_Rect totalRect = {0, 0, world->width * TILE_WIDTH, world->height * TILE_HEIGHT};
+            SDL_RenderFillRect(renderer, &totalRect);
+        }     
+    }
+    if(game->isTotalRed)
+    {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, MAX_RED_ALPHA);
+        SDL_Rect totalRect = {0, 0, world->width * TILE_WIDTH, world->height * TILE_HEIGHT};
+        SDL_RenderFillRect(renderer, &totalRect);
+    }
 
     SDL_RenderPresent(renderer);
-}
-
-void destroyGame(GameState *game)
-{
-    destroyImage(&game->label);
-    if(game->font != NULL)
-    {
-        TTF_CloseFont(game->font);
-    }
 }

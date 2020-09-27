@@ -12,6 +12,7 @@
 #include "game.h"
 #include "timeutils.h"
 #include "mathutils.h"
+#include "SDL_Mixer.h"
 #include "circle.h"
 #include "image.h"
 
@@ -41,6 +42,9 @@
 #define TILE_WIDTH 40
 #define TILE_HEIGHT 40
 
+#define MAX_RED_ALPHA 150
+#define MAX_RED_TIME (1000 * 1000 * 1000)
+
 typedef struct
 {
     int64_t x, y;
@@ -58,6 +62,7 @@ typedef struct
     uchar* tiles;
     int32_t totalCoins;
     int32_t numCoins;
+    int32_t totalHidenCoins;
 } World;
 
 typedef struct
@@ -75,7 +80,12 @@ typedef struct
     int32_t labeledCoins;
     int32_t labelint32_tersectCount;
     bool showedHidenCoins;
+    bool coinCollided;
     TTF_Font *font;
+    Mix_Chunk *coinChunk;
+    bool isReding;
+    bool isTotalRed;
+    struct timespec redTime;
 } GameState;
 
 int32_t loadGame(GameState *game);

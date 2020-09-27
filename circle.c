@@ -37,13 +37,16 @@ int SDL_RenderFillOval(SDL_Renderer *renderer, int32_t x, int32_t y, int32_t wid
 
     SDL_SetRenderDrawColor(renderer, r, g, b, curA);
 
-    for (xx = 0; xx < halfWidth; xx++) {
+    for (xx = 0; xx < halfWidth; xx++)
+    {
         draw_x1 = x + (halfWidth - 1 - xx);
         draw_x2 = x + width - 1 - (halfWidth - 1 - xx);
         xFactor = xx * xx * hh;
-        for (yy = 0; yy < halfHeight; yy++) {
+        for (yy = 0; yy < halfHeight; yy++)
+        {
             val = xFactor + yy * yy * ww;
-            if (val <= hhww) {
+            if (val <= hhww)
+            {
                 draw_y1 = y + (halfHeight - 1 - yy);
                 draw_y2 = y + height - 1 - (halfHeight - 1 - yy);
                 if(val <= normHhww)

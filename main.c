@@ -11,6 +11,8 @@
 #include "image.h"
 #include "dpiutils.h"
 
+#define ONEKB (1 << 10)
+
 int main(int argc, char*argv[])
 {
     GameState game;
@@ -25,6 +27,8 @@ int main(int argc, char*argv[])
     setprocessdpiaware();
     TTF_Init();
 
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, ONEKB * 4);
     loadResult = loadGame(&game);
     if(loadResult != 0)
     {
@@ -35,7 +39,6 @@ int main(int argc, char*argv[])
     width = game.world.width * TILE_WIDTH;
     height = game.world.height * TILE_HEIGHT;
 
-    SDL_Init(SDL_INIT_VIDEO);
     window = SDL_CreateWindow("Window Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     loadResult = loadAssets(&game, renderer);
